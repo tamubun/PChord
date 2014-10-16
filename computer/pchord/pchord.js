@@ -16,22 +16,26 @@ $(function() {
   req.send();
 
   function play(n) {
-    if ( n < 2 ) {
+    if ( n < 10 ) {
       var src = context.createBufferSource();
 
       src.buffer = buffer;
       src.connect(context.destination);
-      src.start(0, 30+n*2+0.05, 0.9);
+      src.start(0, 36+n+0.05, 0.95);
     } else {
       var src1 = context.createBufferSource(),
-          src2 = context.createBufferSource();
+          src2 = context.createBufferSource(),
+          src3 = context.createBufferSource();
 
       src1.buffer = buffer;
       src1.connect(context.destination);
       src2.buffer = buffer;
       src2.connect(context.destination);
-      src1.start(0, 30+0.05, 0.9);
-      src2.start(0, 30+2.05, 0.9);
+      src3.buffer = buffer;
+      src3.connect(context.destination);
+      src1.start(0, 36+0.05, 0.95);
+      src2.start(0, 36+4.05, 0.95);
+      src3.start(0, 36+7.05, 0.95);
     }
   }
 });
