@@ -1,6 +1,8 @@
 'use strict'
 
 $(function() {
+  var Names = 'C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B'.split(',');
+
   var context = new AudioContext(),
       req, buffer;
 
@@ -10,32 +12,63 @@ $(function() {
   req.onload = function() {
     context.decodeAudioData(req.response, function(b) {
       buffer = b;
-      $('button').click(function() { play(+$(this).attr('num'));})
+      $('button').click(function() { play(nameToPos($(this).text()));})
+      $('#chord-input').keydown(function(ev) {
+	if ( ev.which === 13 )
+          playChord($(this).val());
+      });
     });
   };
   req.send();
 
-  function play(n) {
-    if ( n < 10 ) {
-      var src = context.createBufferSource();
+  function play(pos) {
+    var src = context.createBufferSource();
 
-      src.buffer = buffer;
-      src.connect(context.destination);
-      src.start(0, 36+n+0.05, 0.95);
-    } else {
-      var src1 = context.createBufferSource(),
-          src2 = context.createBufferSource(),
-          src3 = context.createBufferSource();
+    src.buffer = buffer;
+    src.connect(context.destination);
+    src.start(0, pos+0.05, 0.95);
+  }
 
-      src1.buffer = buffer;
-      src1.connect(context.destination);
-      src2.buffer = buffer;
-      src2.connect(context.destination);
-      src3.buffer = buffer;
-      src3.connect(context.destination);
-      src1.start(0, 36+0.05, 0.95);
-      src2.start(0, 36+4.05, 0.95);
-      src3.start(0, 36+7.05, 0.95);
+  function playChord(input) {
+    var v = input.split(',');
+
+    if ( v.length < 1 || v.length > 4 )
+      return;
+
+    $(v).each(function(i, name) {
+      var pos = nameToPos(name);
+      if ( pos === null || pos < 0 )
+        return;
+      play(pos);
+    });
+  }
+
+  function posToName(pos) {
+    return Names[pos%12] + (1 + Math.floor(pos / 12));
+  }
+
+  function nameToPos(name) {
+    var found = name.toUpperCase().match(/([A-H])([FS]?)([1-6])/),
+        doremi, acc, oct;
+
+    if ( found === null )
+      return null;
+
+    doremi = found[1];
+    acc = found[2].toLowerCase();
+    oct = +found[3];
+
+    if ( doremi === 'H' )
+      doremi = 'B';
+    if ( acc === 's' && ( doremi === 'E' || doremi === 'B' ) ||
+         acc === 'f' && ( doremi === 'F' || doremi === 'C' ) )
+      return null;
+
+    if ( acc === 'f' ) {
+      doremi = String.fromCharCode(doremi.charCodeAt(0)-1);
+      acc = 's';
     }
+
+    return 12 * (+oct-1) + Names.indexOf(doremi+acc);
   }
 });
