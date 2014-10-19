@@ -4,34 +4,23 @@ $(function() {
   var Names = 'C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B'.split(',');
   var Chords = {
     /*  和音名:[<密3の列>,<密4の列>]
-        <密3/密4の列> --- [[<構成音>,...], ...] パターンがループするまで
-        <構成音> --- 基音からの距離で表現
+        <密3/密4の列> --- [s, d0, d1, d2, ...]
+          s --- 最初の音の基音からの距離
+          d0, d1, d2, .... --- 最初の音からの距離。最後は12
 
-	<開の列> = <密の列>の上から二つ目の音をオクターブ下げる */
-    ' ':     [[[0,4,7], [4,7,12], [7,12,16]],
-              [[-5,0,4,7], [0,4,7,12], [4,7,12,16]]],
-    'm':     [[[0,3,7], [3,7,12], [7,12,15]],
-              [[-5,0,3,7], [0,3,7,12], [3,7,12,15]]],
-    '7':     [[[0,4,10], [4,10,12], [10,12,16]],
-              [[0,4,7,10], [4,7,10,12], [7,10,12,16], [10,12,16,19]]],
-    'M7':    [[[-1,0,4], [0,4,11], [4,11,12]],
-              [[-1,0,4,7],[0,4,7,11],[4,7,11,12],[7,11,12,16]]],
-    'm7':    [[[0,3,10], [3,10,12], [10,12,15]],
-              [[0,3,7,10], [3,7,10,12], [7,10,12,15], [10,12,15,19]]],
-    'dim7':  [[[3,6,9], [6,9,15], [9,15,18]],
-              [[0,3,6,9], [3,6,9,12], [6,9,12,15], [9,12,15,18]]],
-    'm7b5':  [[[3,6,10], [6,10,15], [10,15,18]],
-              [[0,3,6,10], [3,6,10,12], [6,10,12,15], [10,12,15,18]]],
-    'aug':   [[[0,4,8], [4,8,12], [8,12,16]],
-              [[-4,0,4,8], [0,4,8,12], [4,8,12,16]]],
-    'sus4':  [[[0,5,7], [5,7,12], [7,12,17]],
-              [[-5,0,5,7], [0,5,7,12], [5,7,12,17]]],
-    '7sus4': [[[0,5,10], [5,10,12], [10,12,17]],
-              [[0,5,7,10], [5,7,10,12], [7,10,12,17], [10,12,17,19]]],
-    '6':     [[[4,7,9], [7,9,16], [9,16,19]],
-              [[0,4,7,9], [4,7,9,12], [7,9,12,16], [9,12,16,19]]],
-    'add9':  [[[2,4,7], [4,7,14], [7,14,16]],
-              [[0,2,4,7], [2,4,7,12], [4,7,12,14], [7,12,14,16]]]
+        <開の列> = <密の列>の上から二つ目の音をオクターブ下げる */
+    '':      [[0, 4, 7, 12], [0, 4, 7, 12]],
+    'm':     [[0, 3, 7, 12], [0, 3, 7, 12]],
+    '7':     [[0, 4, 10, 12], [0, 4, 7, 10, 12]],
+    'M7':    [[0, 4, 11, 12], [0, 4, 7, 11, 12]],
+    'm7':    [[0, 3, 10, 12], [0, 3, 7, 10, 12]],
+    'dim7':  [[3, 3, 7, 12], [0, 3, 6, 9, 12]],
+    'm7b5':  [[3, 3, 7, 12], [0, 3, 6, 10, 12]],
+    'aug':   [[0, 4, 8, 12], [0, 4, 8, 12]],
+    'sus4':  [[0, 5, 7, 12], [0, 5, 7, 12]],
+    '7sus4': [[0, 5, 10, 12], [0, 5, 7, 10, 12]],
+    '6':     [[4, 3, 5, 12], [0, 4, 7, 9, 12]],
+    'add9':  [[2, 2, 5, 12], [0, 2, 4, 7, 12]]
   };
 
   var context = new AudioContext(),
@@ -43,7 +32,8 @@ $(function() {
   req.onload = function() {
     context.decodeAudioData(req.response, function(b) {
       buffer = b;
-      $('button').click(function() { play(nameToPos($(this).text()));})
+      $('.sound').click(function() { play(nameToPos($(this).text()));})
+      $('.gen').click(generate)
       $('#chord-input').keydown(function(ev) {
         if ( ev.which === 13 )
           playChord($(this).val());
@@ -74,6 +64,24 @@ $(function() {
     });
   }
 
+  function generate() {
+    var chord, base, pattern, shift, num, dense, i, txt;
+
+    base = $('#base').val();
+    pattern = $('#pattern').val();
+    shift = +$('#shift').val();
+    num = +$('#num').val();
+    dense = $('#dense').val() === 'true';
+    chord = generateChord(base, pattern, shift, num, dense);
+
+    txt = []
+    for ( i = 0; i < chord.length; ++i )
+      txt.push(posToName(chord[i]));
+    txt = txt.join(',');
+    $('#chord-input').val(txt);
+    playChord(txt);
+  }
+
   function posToName(pos) {
     return Names[pos%12] + (1 + Math.floor(pos / 12));
   }
@@ -101,5 +109,48 @@ $(function() {
     }
 
     return 12 * (+oct-1) + Names.indexOf(doremi+acc);
+  }
+
+  function getDist(seq, idx) {
+    var dist = seq[0], len = seq.length - 1;
+
+    dist += 12 * Math.floor(idx/len);
+    if ( idx >= 0 ) {
+      if ( idx % len > 0 )
+        dist += seq[idx % len];
+    } else {
+      if ( idx % len <= -1 )
+        dist  += seq[len + idx % len]
+    }
+    return dist;
+  }
+
+  function generateChord(base, pattern, shift, num, dense) {
+    var seq = Chords[pattern], pos_b, ans = [], i, offset, p;
+
+    if ( seq === undefined || shift < -6 || shift > 6 || num < 3 || num > 4 )
+      return null;
+    base = base+'4';
+    pos_b = nameToPos(base);
+    if ( pos_b === null )
+      return null;
+
+    seq = (num === 3) ? seq[0] : seq[1];
+    offset = 0;
+    while ( pos_b + getDist(seq, num + offset - 1) >= 47 ) {
+      // 一番上の音がB4より高くならないようにずらす
+      --offset;
+    }
+
+    for ( i = offset; i < num + offset; ++i ) {
+      p = pos_b + getDist(seq, shift + i);
+      if ( !dense && i == num + offset - 2 ) {
+        ans.unshift(p-12);
+      } else {
+        ans.push(p);
+      }
+    }
+
+    return ans;
   }
 });
