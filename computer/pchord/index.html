@@ -9,17 +9,23 @@
   <body>
     <div id="wrap">
       <header>
-<!--
         <h1>バンブラP ピアノコード検索</h1>
-!-->
       </header>
+      <p>バンブラPのピアノコード検索ツールのプロトタイプです。このあと、音をマウスクリックで指定出来るようにしたり、見てくれを良くしたりしていく予定です。今の所 Firefox 33.0でしか動作確認してません。</p>
+      <p>一番高い音や、一番低い音などを最低一つ指定して、検索を押すと、条件に合う和音を見つけます。見つかった音のボタンを押すとその和音が鳴ります(時々、音が割れますが何回かボタンを押すと直ります)。</p>
+<p>音は、"C4"のように音名とオクターブを繋いで指定して下さい。♯♭の付いた音は、"Cs4"や"Df4"のように記述します。</p>
+      <p>検索結果が多い時は、下に並んだチェックボックスで条件を絞って下さい。</p>
+      <p>例えば"D♯"の和音と"E♭"の和音は同じ物になり、どちらも列挙すると数が多くなってしまうので、今のところ"♯"の方だけを出すようにしています。</p>
+      <br>
+      <hr color="red">
+      <br>
       <div id="search">
         <div id="sounds">
           <input type="text" id="highest">一番高い音</input>
           <br>
-          <input type="text" id="lowest">一番低い音</input>
+          <input type="text" id="lowest" value="C4">一番低い音</input>
           <br>
-          <input type="text" id="any1">どこでも</input>
+          <input type="text" id="any1" value="Ef4">どこでも</input>
           <br>
           <input type="text" id="any2">どこでも</input>
           <br>
@@ -86,5 +92,11 @@
       コード: <input type="text" id="chord-input" value="">
       <br>
     </div>
+    <br>
+    <hr>
+    <p style="text-align: center;">
+      <a href="../../index.html">ホームへ</a>
+      <a href="http://bunysmc.exblog.jp/">ブログへ</a>
+    </p>
   </body>
 </html>

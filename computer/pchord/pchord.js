@@ -29,7 +29,7 @@ $(function() {
       req, buffer;
 
   req = new XMLHttpRequest();
-  req.open('GET', 'scale.mp3', true);
+  req.open('GET', 'scale.ogg', true);
   req.responseType = 'arraybuffer';
   req.onload = function() {
     context.decodeAudioData(req.response, function(b) {
