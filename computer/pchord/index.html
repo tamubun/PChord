@@ -13,62 +13,78 @@
         <h1>バンブラP ピアノコード検索</h1>
 !-->
       </header>
-      <button type="button" class="sound">c4</button>
-      <button type="button" class="sound">e4</button>
-      <button type="button" class="sound">g4</button>
-      <input type="text" id="chord-input" value="c4,e4,g4">
+      <div id="search">
+        <div id="sounds">
+          <input type="text" id="highest">一番高い音</input>
+          <br>
+          <input type="text" id="lowest">一番低い音</input>
+          <br>
+          <input type="text" id="any1">どこでも</input>
+          <br>
+          <input type="text" id="any2">どこでも</input>
+          <br>
+          <input type="text" id="any3">どこでも</input>
+        </div>
+        <div id="filter-base">
+          <input type="checkbox" checked value="C">C</input>
+          <input type="checkbox" checked value="Cs">Cs</input>
+          <input type="checkbox" checked value="D">D</input>
+          <input type="checkbox" checked value="Ds">Ds</input>
+          <input type="checkbox" checked value="E">E</input>
+          <input type="checkbox" checked value="F">F</input>
+          <input type="checkbox" checked value="Fs">Fs</input>
+          <input type="checkbox" checked value="G">G</input>
+          <input type="checkbox" checked value="Gs">Gs</input>
+          <input type="checkbox" checked value="A">A</input>
+          <input type="checkbox" checked value="As">As</input>
+          <input type="checkbox" checked value="B">B</input>
+        </div>
+        <div id="filter-pattern">
+          <input type="checkbox" checked value="">&nbsp</input>
+          <input type="checkbox" checked value="m">m</input>
+          <input type="checkbox" checked value="7">7</input>
+          <input type="checkbox" checked value="M7">M7</input>
+          <input type="checkbox" checked value="m7">m7</input>
+          <input type="checkbox" checked value="dim7">dim7</input>
+          <input type="checkbox" checked value="m7b5">m7b5</input>
+          <input type="checkbox" checked value="aug">aug</input>
+          <input type="checkbox" checked value="sus4">sus4</input>
+          <input type="checkbox" checked value="7sus4">7sus4</input>
+          <input type="checkbox" checked value="6">6</input>
+          <input type="checkbox" checked value="add9">add9</input>
+        </div>
+        <div id="filter-shift">
+          <input type="checkbox" checked value="-6">-6</input>
+          <input type="checkbox" checked value="-5">-5</input>
+          <input type="checkbox" checked value="-4">-4</input>
+          <input type="checkbox" checked value="-3">-3</input>
+          <input type="checkbox" checked value="-2">-2</input>
+          <input type="checkbox" checked value="-1">-1</input>
+          <input type="checkbox" checked value="0">0</input>
+          <input type="checkbox" checked value="1">+1</input>
+          <input type="checkbox" checked value="2">+2</input>
+          <input type="checkbox" checked value="3">+3</input>
+          <input type="checkbox" checked value="4">+4</input>
+          <input type="checkbox" checked value="5">+5</input>
+          <input type="checkbox" checked value="6">+6</input>
+        </div>
+        <div id="filter-num">
+          <input type="checkbox" checked value="3">音数3</input>
+          <input type="checkbox" checked value="4">音数4</input>
+        </div>
+        <div id="filter-dense">
+          <input type="checkbox" checked value="true">密</input>
+          <input type="checkbox" checked value="false">開</input>
+        </div>
+        <div>
+          <button id="do-search">検索</button>
+        </div>
+      </div>
       <br>
-      <select id="base">
-        <option value="C" selected>C</option>
-        <option value="Cs">Cs</option>
-        <option value="D">D</option>
-        <option value="Ds">Ds</option>
-        <option value="E">E</option>
-        <option value="F">F</option>
-        <option value="G">G</option>
-        <option value="Gs">Gs</option>
-        <option value="A">A</option>
-        <option value="As">As</option>
-        <option value="B">B</option>
-      </select>
-      <select id="pattern">
-        <option value="" selected>&nbsp</option>
-        <option value="m">m</option>
-        <option value="7">7</option>
-        <option value="M7">M7</option>
-        <option value="m7">m7</option>
-        <option value="dim7">dim7</option>
-        <option value="m7b5">m7b5</option>
-        <option value="aug">aug</option>
-        <option value="sus4">sus4</option>
-        <option value="7sus4">7sus4</option>
-        <option value="6">6</option>
-        <option value="add9">add9</option>
-      </select>
-      <select id="shift">
-        <option value="6">6</option>
-        <option value="5">5</option>
-        <option value="4">4</option>
-        <option value="3">3</option>
-        <option value="2">2</option>
-        <option value="1">1</option>
-        <option value="0" selected>0</option>
-        <option value="-1">-1</option>
-        <option value="-2">-2</option>
-        <option value="-3">-3</option>
-        <option value="-4">-4</option>
-        <option value="-5">-5</option>
-        <option value="-6">-6</option>
-      </select>
-      <select id="num">
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
-      <select id="dense">
-        <option value="true">密</option>
-        <option value="false">開</option>
-      </select>
-      <button type="button" class="gen">生成</button>
+      <div id="result">
+      </div>
+      コード: <input type="text" id="chord-input" value="">
+      <br>
     </div>
   </body>
 </html>

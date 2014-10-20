@@ -23,6 +23,8 @@ $(function() {
     'add9':  [[2, 2, 5, 12], [0, 2, 4, 7, 12]]
   };
 
+  var allChords;
+
   var context = new AudioContext(),
       req, buffer;
 
@@ -32,15 +34,18 @@ $(function() {
   req.onload = function() {
     context.decodeAudioData(req.response, function(b) {
       buffer = b;
-      $('.sound').click(function() { play(nameToPos($(this).text()));})
-      $('.gen').click(generate)
       $('#chord-input').keydown(function(ev) {
         if ( ev.which === 13 )
           playChord($(this).val());
       });
+      $('#do-search').click(doSearch);
     });
   };
   req.send();
+  generateAll();
+  $('#result').on('click', 'button', function(ev) {
+    printAndPlay($(ev.target).attr('chord'));
+  });
 
   function play(pos) {
     var src = context.createBufferSource();
@@ -64,26 +69,102 @@ $(function() {
     });
   }
 
-  function generate() {
-    var chord, base, pattern, shift, num, dense, i, txt;
+  function doSearch() {
+    var highest, lowest, any, f, i, c, txt,
+        flag = [0,0,0],
+        ans = [];
 
-    base = $('#base').val();
-    pattern = $('#pattern').val();
-    shift = +$('#shift').val();
-    num = +$('#num').val();
-    dense = $('#dense').val() === 'true';
-    chord = generateChord(base, pattern, shift, num, dense);
+    $('#result').empty();
+    $('#chord-input').val('');
 
-    txt = []
-    for ( i = 0; i < chord.length; ++i )
-      txt.push(posToName(chord[i]));
-    txt = txt.join(',');
+    highest = nameToPos($('#highest').val());
+    lowest = nameToPos($('#lowest').val());
+    if ( highest !== null )
+      flagOr(flag, posToFlag(highest));
+    else $('#highest').val('');
+    if ( lowest !== null )
+      flagOr(flag, posToFlag(lowest));
+    else $('#lowest').val('');
+    any = nameToPos($('#any1').val());
+    if ( any !== null )
+      flagOr(flag, posToFlag(any));
+    else $('#any1').val('');
+    any = nameToPos($('#any2').val());
+    if ( any !== null )
+      flagOr(flag, posToFlag(any));
+    else $('#any2').val('');
+    any = nameToPos($('#any3').val());
+    if ( any !== null )
+      flagOr(flag, posToFlag(any));
+    else $('#any3').val('');
+
+    if ( flag[0] === 0 && flag[1] === 0 && flag[2] === 0 )
+      return;
+
+    for ( i = 0; i < allChords.length; ++i ) {
+      c = allChords[i];
+      if ( !flagMatch(flag, c.flag) )
+        continue;
+      if ( highest !== null && highest !== c.chord[c.chord.length-1] )
+        continue;
+      if ( lowest !== null && lowest !== c.chord[0] )
+        continue;
+      if ( !$('#filter-base>input[value=' + c.base + ']').prop('checked') )
+        continue;
+      if ( !$('#filter-pattern>input[value=' + c.pattern + ']')
+           .prop('checked') )
+        continue;
+      if ( !$('#filter-shift>input[value=' + c.shift + ']').prop('checked') )
+        continue;
+      if ( !$('#filter-num>input[value=' + c.num + ']').prop('checked') )
+        continue;
+      if ( !$('#filter-dense>input[value=' + c.dense + ']').prop('checked') )
+        continue;
+
+      ans.push(c);
+    }
+
+    for ( i = 0; i < ans.length; ++i ) {
+      c = ans[i];
+      txt = ('' + c.base + c.pattern + ' ' +
+             (c.shift > 0 ? '+' : '') +
+             c.shift + ' 音数' + c.num + ' ' + (c.dense ? '密' : '開'));
+      $('#result').append($('<button chord="' + c.chord.toString() + '">' +
+                            txt + '</button>'));
+    }
+  }
+
+  function printAndPlay(chord) {
+    var v = chord.split(','), i, v2, txt;
+
+    v2 = [];
+    for ( i = 0; i < v.length; ++i )
+      v2.push(posToName(+v[i]));
+    txt = v2.join(',');
     $('#chord-input').val(txt);
     playChord(txt);
   }
 
   function posToName(pos) {
     return Names[pos%12] + (1 + Math.floor(pos / 12));
+  }
+
+  function posToFlag(pos) {
+    var f = 1 << (pos % 32);
+    return (pos < 32) ? [f,0,0] : ((pos < 64) ? [0,f,0]: [0,0,f]);
+  }
+
+  function flagOr(flag, f) {
+    flag[0] |= f[0];
+    flag[1] |= f[1];
+    flag[2] |= f[2];
+  }
+
+  function flagMatch(f1, f2) {
+    return (
+      (f1[0] & f2[0]) === f1[0] &&
+      (f1[1] & f2[1]) === f1[1] &&
+      (f1[2] & f2[2]) === f1[2] );
   }
 
   function nameToPos(name) {
@@ -152,5 +233,38 @@ $(function() {
     }
 
     return ans;
+  }
+
+  function generateAll() {
+    var i, j, flag, f, chord,
+        base, pattern, shift, num, dense;
+
+    allChords = [];
+    for ( i = 0; i < Names.length; ++i ) {
+      base = Names[i];
+      for ( pattern in Chords ) {
+        for ( shift = -6; shift < 7; ++shift ) {
+          for ( num = 3; num < 5; ++num ) {
+            for ( dense = 0; dense < 2; ++dense ) {
+              chord = generateChord(base, pattern, shift, num, dense == 0);
+              flag = [0,0,0];
+              for ( j = 0; j < chord.length; ++j ) {
+                f = posToFlag(chord[j]);
+                flagOr(flag, f);
+              }
+              allChords.push({
+                base: base,
+                pattern: pattern,
+                shift: shift,
+                num: num,
+                dense: dense == 0,
+                flag: flag,
+                chord: chord
+              });
+            }
+          }
+        }
+      }
+    }
   }
 });
