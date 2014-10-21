@@ -39,6 +39,7 @@ $(function() {
           playChord($(this).val());
       });
       $('#do-search').click(doSearch);
+      $('#loading').hide();
     });
   };
   req.send();
