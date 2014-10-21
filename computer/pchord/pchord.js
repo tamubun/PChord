@@ -127,7 +127,7 @@ $(function() {
 
     for ( i = 0; i < ans.length; ++i ) {
       c = ans[i];
-      txt = ('' + c.base + c.pattern + ' ' +
+      txt = ('' + c.base + ' ' + c.pattern + ' ' +
              (c.shift > 0 ? '+' : '') +
              c.shift + ' 音数' + c.num + ' ' + (c.dense ? '密' : '開'));
       $('#result').append($('<button chord="' + c.chord.toString() + '">' +
