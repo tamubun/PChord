@@ -1,7 +1,7 @@
 'use strict'
 
 $(function() {
-  var Names = 'C,Cs,D,Ds,E,F,Fs,G,Gs,A,As,B'.split(',');
+  var Names = 'C,C♯,D,D♯,E,F,F♯,G,G♯,A,A♯,B'.split(',');
   var Chords = {
     /*  和音名:[<密3の列>,<密4の列>]
         <密3/密4の列> --- [s, d0, d1, d2, ...]
@@ -127,7 +127,7 @@ $(function() {
 
     for ( i = 0; i < ans.length; ++i ) {
       c = ans[i];
-      txt = ('' + c.base + ' ' + c.pattern + ' ' +
+      txt = ('' + c.base + c.pattern + ' ' +
              (c.shift > 0 ? '+' : '') +
              c.shift + ' 音数' + c.num + ' ' + (c.dense ? '密' : '開'));
       $('#result').append($('<button chord="' + c.chord.toString() + '">' +
@@ -169,7 +169,7 @@ $(function() {
   }
 
   function nameToPos(name) {
-    var found = name.toUpperCase().match(/([A-H])([FS]?)([1-6])/),
+    var found = name.toUpperCase().match(/([A-H])([FSB#♭♯]?)([1-6])/),
         doremi, acc, oct;
 
     if ( found === null )
@@ -181,13 +181,17 @@ $(function() {
 
     if ( doremi === 'H' )
       doremi = 'B';
-    if ( acc === 's' && ( doremi === 'E' || doremi === 'B' ) ||
-         acc === 'f' && ( doremi === 'F' || doremi === 'C' ) )
+    if ( acc === 'f' || acc === 'b' )
+      acc = '♭';
+    else if ( acc === 's' || acc === '#' )
+      acc = '♯'
+    if ( acc === '♯' && ( doremi === 'E' || doremi === 'B' ) ||
+         acc === '♭' && ( doremi === 'F' || doremi === 'C' ) )
       return null;
 
-    if ( acc === 'f' ) {
+    if ( acc === '♭' ) {
       doremi = String.fromCharCode(doremi.charCodeAt(0)-1);
-      acc = 's';
+      acc = '♯';
     }
 
     return 12 * (+oct-1) + Names.indexOf(doremi+acc);

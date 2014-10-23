@@ -27,7 +27,7 @@
       <div id='loading'><p>読み込み中...</p></div>
       <p>バンブラPのピアノコード検索ツールのプロトタイプです。このあと、音をマウスクリックで指定出来るようにしたり、見てくれを良くしたりしていく予定です。今の所 Firefox 33.0でしか動作確認してません。</p>
       <p>一番高い音や、一番低い音などを最低一つ指定して、検索を押すと、条件に合う和音を見つけます。見つかった音のボタンを押すとその和音が鳴ります(時々、音が割れますが何回かボタンを押すと直ります)。</p>
-<p>音は、"C4"のように音名とオクターブを繋いで指定して下さい。♯♭の付いた音は、"Cs4"や"Df4"のように記述します。</p>
+<p>音は、"C4"のように音名とオクターブを繋いで指定して下さい。♯の付いた音は、例えば"C♯4", "C#4", "Cs4"のように記述します(どの書き方でも構いません)。♭の方は"E♭4", "Eb4", 又は"Ef4"のように記述します。</p>
       <p>検索結果が多い時は、下に並んだチェックボックスで条件を絞って下さい。</p>
       <p>例えば"D♯"の和音と"E♭"の和音は同じ物になり、どちらも列挙すると数が多くなってしまうので、今のところ"♯"の方だけを出すようにしています。</p>
       <br>
@@ -47,16 +47,16 @@
         </div>
         <div id="filter-base">
           <input type="checkbox" checked value="C">C</input>
-          <input type="checkbox" checked value="Cs">Cs</input>
+          <input type="checkbox" checked value="C♯">C♯</input>
           <input type="checkbox" checked value="D">D</input>
-          <input type="checkbox" checked value="Ds">Ds</input>
+          <input type="checkbox" checked value="D♯">D♯</input>
           <input type="checkbox" checked value="E">E</input>
           <input type="checkbox" checked value="F">F</input>
-          <input type="checkbox" checked value="Fs">Fs</input>
+          <input type="checkbox" checked value="F♯">F♯</input>
           <input type="checkbox" checked value="G">G</input>
-          <input type="checkbox" checked value="Gs">Gs</input>
+          <input type="checkbox" checked value="G♯">G♯</input>
           <input type="checkbox" checked value="A">A</input>
-          <input type="checkbox" checked value="As">As</input>
+          <input type="checkbox" checked value="A♯">A♯</input>
           <input type="checkbox" checked value="B">B</input>
         </div>
         <div id="filter-pattern">
