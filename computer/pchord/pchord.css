@@ -1,0 +1,11 @@
+#loading {
+  top: 150px;
+  left: 150px;
+  padding: 150px;
+  position: absolute;
+  background-color: black;
+  color: white;
+  z-index: 1;
+  font: bold xx-large sans-serif;
+  text-align: center;
+}
