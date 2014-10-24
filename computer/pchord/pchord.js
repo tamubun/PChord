@@ -40,6 +40,11 @@ $(function() {
       });
       $('#do-search').click(doSearch);
       $('#loading').hide();
+      $('.piano td.white, .piano td.black').click(function() {
+        $(this).toggleClass('selected');
+        if ( $(this).hasClass('selected') )
+          $(this).siblings().removeClass('selected');
+      });
     });
   };
   req.send();
@@ -78,26 +83,26 @@ $(function() {
     $('#result').empty();
     $('#chord-input').val('');
 
-    highest = nameToPos($('#highest').val());
-    lowest = nameToPos($('#lowest').val());
+    highest = nameToPos($('#highest-input').val());
+    lowest = nameToPos($('#lowest-input').val());
     if ( highest !== null )
       flagOr(flag, posToFlag(highest));
-    else $('#highest').val('');
+    else $('#highest-input').val('');
     if ( lowest !== null )
       flagOr(flag, posToFlag(lowest));
-    else $('#lowest').val('');
-    any = nameToPos($('#any1').val());
+    else $('#lowest-input').val('');
+    any = nameToPos($('#any1-input').val());
     if ( any !== null )
       flagOr(flag, posToFlag(any));
-    else $('#any1').val('');
-    any = nameToPos($('#any2').val());
+    else $('#any1-input').val('');
+    any = nameToPos($('#any2-input').val());
     if ( any !== null )
       flagOr(flag, posToFlag(any));
-    else $('#any2').val('');
-    any = nameToPos($('#any3').val());
+    else $('#any2-input').val('');
+    any = nameToPos($('#any3-input').val());
     if ( any !== null )
       flagOr(flag, posToFlag(any));
-    else $('#any3').val('');
+    else $('#any3-input').val('');
 
     if ( flag[0] === 0 && flag[1] === 0 && flag[2] === 0 )
       return;

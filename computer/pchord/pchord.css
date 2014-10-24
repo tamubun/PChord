@@ -9,3 +9,57 @@
   font: bold xx-large sans-serif;
   text-align: center;
 }
+
+#search input {
+  width:2.5em;
+  margin-left: 3px;
+  margin-right: 8px;
+}
+
+#chord-input {
+  width:10em;
+  margin-left: 3px;
+  margin-right: 8px;
+}
+
+.piano {
+  display: inline;
+  border-collapse: collapse;
+  vertical-align: -70%;
+}
+
+.piano tr.space {
+  border: 0px;
+  height: 18px;
+}
+
+.piano td.white {
+  width: 14px;
+  height: 50px;
+  border: 1px solid black;
+  cursor: pointer;
+  border-right-width: 0px;
+  margin-left: -1px;
+  text-align: center;
+  vertical-align: bottom;
+  font-size: small;
+}
+
+.piano td.black {
+  position: absolute;
+  width: 8px;
+  height: 25px;
+  border: 1px solid black;
+  cursor: pointer;
+  border-top-width: 0px;
+  margin-left: -6px;
+  background-color: #444;
+}
+
+.piano td.last {
+  border-right-width: 1px;
+}
+
+.piano td.selected {
+  background-color: #e00;
+}
