@@ -35,13 +35,12 @@ $(function() {
     context.decodeAudioData(req.response, function(b) {
       buffer = b;
       $('#search .piano input').keydown(function(ev) {
-        var name = $(this).val(), pos, siblings;
+        var name = $(this).val(), pos;
+
         if ( ev.which === 13 && name !== '' ) {
           pos = nameToPos(name);
           if ( pos !== null ) {
-            siblings = $(this).parent().siblings();
-            siblings.removeClass('selected');
-            siblings.filter('[pos=' + pos + ']').addClass('selected');
+            selectPos($(this).parents('.keys'), pos);
             play(pos);
           }
         }
@@ -53,14 +52,15 @@ $(function() {
       $('#do-search').click(doSearch);
       $('#loading').hide();
       $('.piano td.white, .piano td.black').click(function() {
-        var siblings = $(this).siblings(),
-            input = siblings.eq(1).children(),
+        var input = $(this).siblings().eq(1).children(),
             pos;
-        $(this).toggleClass('selected');
+
         input.val('');
         if ( $(this).hasClass('selected') ) {
+          $(this).removeClass('selected');
+        } else {
           pos = +$(this).attr('pos');
-          siblings.removeClass('selected');
+          selectPos($(this).parent(), pos);
           input.val(posToName(pos));
           play(pos);
         }
@@ -96,34 +96,41 @@ $(function() {
     });
   }
 
+  function selectPos(keys, pos) {
+    var tds = keys.find('td[pos]');
+
+    tds.removeClass('selected');
+    tds.filter('[pos=' + pos + ']').addClass('selected');
+  }
+
+  function doSearchSub(selector, flag) {
+    var pos = nameToPos($(selector).val()),
+        keys = $(selector).parents('.keys');
+
+    if ( pos !== null ) {
+      selectPos(keys, pos);
+      flagOr(flag, posToFlag(pos));
+    } else {
+      keys.find('.selected').removeClass('selected');
+      $(selector).val('');
+    }
+
+    return pos
+  }
+
   function doSearch() {
-    var highest, lowest, any, f, i, c, txt,
+    var highest, lowest, f, i, c, txt,
         flag = [0,0,0],
         ans = [];
 
     $('#buttons').empty();
     $('#chord-input').val('');
 
-    highest = nameToPos($('#highest-input').val());
-    lowest = nameToPos($('#lowest-input').val());
-    if ( highest !== null )
-      flagOr(flag, posToFlag(highest));
-    else $('#highest-input').val('');
-    if ( lowest !== null )
-      flagOr(flag, posToFlag(lowest));
-    else $('#lowest-input').val('');
-    any = nameToPos($('#any1-input').val());
-    if ( any !== null )
-      flagOr(flag, posToFlag(any));
-    else $('#any1-input').val('');
-    any = nameToPos($('#any2-input').val());
-    if ( any !== null )
-      flagOr(flag, posToFlag(any));
-    else $('#any2-input').val('');
-    any = nameToPos($('#any3-input').val());
-    if ( any !== null )
-      flagOr(flag, posToFlag(any));
-    else $('#any3-input').val('');
+    highest = doSearchSub('#highest-input', flag);
+    lowest = doSearchSub('#lowest-input', flag);
+    doSearchSub('#any1-input', flag);
+    doSearchSub('#any2-input', flag);
+    doSearchSub('#any3-input', flag);
 
     if ( flag[0] === 0 && flag[1] === 0 && flag[2] === 0 )
       return;
@@ -199,7 +206,7 @@ $(function() {
   }
 
   function nameToPos(name) {
-    var found = name.toUpperCase().match(/([A-H])([FSB#♭♯]?)([1-6])/),
+    var found = name.toUpperCase().match(/^([A-H])([FSB#♭♯]?)([1-6])$/),
         doremi, acc, oct;
 
     if ( found === null )

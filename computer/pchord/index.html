@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <title>Piano Chord search for Bandbrothers P</title>
-    <link rel='stylesheet' href='pchord.css' />
-    <script src='../../js/jquery-1.10.2.min.js'></script>
+    <link rel="stylesheet" href="pchord.css" />
+    <script src="../../js/jquery-1.10.2.min.js"></script>
     <script src="pchord.js"></script>
   </head>
   <body>
     <header>
       <h1>バンブラP ピアノコード検索</h1>
     </header>
-    <div id='loading'><p>読み込み中...</p></div>
+    <div id="loading"><p>読み込み中...</p></div>
     <p>バンブラPのピアノコード検索ツールのプロトタイプです。このあと、音をマウスクリックで指定出来るようにしたり、見てくれを良くしたりしていく予定です。今の所 Firefox 33.0でしか動作確認してません。</p>
     <p>一番高い音や、一番低い音などを最低一つ指定して、検索を押すと、条件に合う和音を見つけます。見つかった音のボタンを押すとその和音が鳴ります(時々、音が割れますが何回かボタンを押すと直ります)。</p>
     <p>音は、"C4"のように音名とオクターブを繋いで指定して下さい。♯の付いた音は、例えば"C♯4", "C#4", "Cs4"のように記述します(どの書き方でも構いません)。♭の方は"E♭4", "Eb4", 又は"Ef4"のように記述します。</p>
@@ -21,7 +21,7 @@
     <div id="search">
       <table class="piano">
         <tbody>
-          <tr id="highest">
+          <tr id="highest" class="keys">
             <td>一番高い音:</td>
             <td><input type="text" id="highest-input"></input></td>
             <td class="white" pos="0">1</td>
@@ -98,7 +98,7 @@
             <td class="white last" pos="71"></td>
           </tr>
           <tr class="space"></tr>
-          <tr id="lowest">
+          <tr id="lowest" class="keys">
             <td>一番低い音:</td>
             <td><input type="text" id="lowest-input"></input></td>
             <td class="white" pos="0">1</td>
@@ -175,7 +175,7 @@
             <td class="white last" pos="71"></td>
           </tr>
           <tr class="space"></tr>
-          <tr id="any1">
+          <tr id="any1" class="keys">
             <td>どこでも:</td>
             <td><input type="text" id="any1-input"></input></td>
             <td class="white" pos="0">1</td>
@@ -252,7 +252,7 @@
             <td class="white last" pos="71"></td>
           </tr>
           <tr class="space"></tr>
-          <tr id="any2">
+          <tr id="any2" class="keys">
             <td>どこでも:</td>
             <td><input type="text" id="any2-input"></input></td>
             <td class="white" pos="0">1</td>
@@ -329,7 +329,7 @@
             <td class="white last" pos="71"></td>
           </tr>
           <tr class="space"></tr>
-          <tr id="any3">
+          <tr id="any3" class="keys">
             <td>どこでも:</td>
             <td><input type="text" id="any3-input"></input></td>
             <td class="white" pos="0">1</td>
@@ -469,7 +469,7 @@
       </div>
       <table class="piano">
         <tbody>
-          <tr id="highest">
+          <tr id="highest" class="keys">
             <td>コード:</td>
             <td><input type="text" id="chord-input"></input></td>
             <td class="white" pos="0">1</td>
