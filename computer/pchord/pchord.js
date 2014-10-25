@@ -34,6 +34,18 @@ $(function() {
   req.onload = function() {
     context.decodeAudioData(req.response, function(b) {
       buffer = b;
+      $('#search .piano input').keydown(function(ev) {
+        var name = $(this).val(), pos, siblings;
+        if ( ev.which === 13 && name !== '' ) {
+          pos = nameToPos(name);
+          if ( pos !== null ) {
+            siblings = $(this).parent().siblings();
+            siblings.removeClass('selected');
+            siblings.filter('[pos=' + pos + ']').addClass('selected');
+            play(pos);
+          }
+        }
+      });
       $('#chord-input').keydown(function(ev) {
         if ( ev.which === 13 )
           playChord($(this).val());
@@ -41,15 +53,24 @@ $(function() {
       $('#do-search').click(doSearch);
       $('#loading').hide();
       $('.piano td.white, .piano td.black').click(function() {
+        var siblings = $(this).siblings(),
+            input = siblings.eq(1).children(),
+            pos;
         $(this).toggleClass('selected');
-        if ( $(this).hasClass('selected') )
-          $(this).siblings().removeClass('selected');
+        input.val('');
+        if ( $(this).hasClass('selected') ) {
+          pos = +$(this).attr('pos');
+          siblings.removeClass('selected');
+          input.val(posToName(pos));
+          play(pos);
+        }
       });
     });
   };
   req.send();
   generateAll();
-  $('#result').on('click', 'button', function(ev) {
+  $('.piano input').val('');
+  $('#buttons').on('click', 'button', function(ev) {
     printAndPlay($(ev.target).attr('chord'));
   });
 
@@ -80,7 +101,7 @@ $(function() {
         flag = [0,0,0],
         ans = [];
 
-    $('#result').empty();
+    $('#buttons').empty();
     $('#chord-input').val('');
 
     highest = nameToPos($('#highest-input').val());
@@ -135,17 +156,21 @@ $(function() {
       txt = ('' + c.base + c.pattern + ' ' +
              (c.shift > 0 ? '+' : '') +
              c.shift + ' 音数' + c.num + ' ' + (c.dense ? '密' : '開'));
-      $('#result').append($('<button chord="' + c.chord.toString() + '">' +
+      $('#buttons').append($('<button chord="' + c.chord.toString() + '">' +
                             txt + '</button>'));
     }
   }
 
   function printAndPlay(chord) {
-    var v = chord.split(','), i, v2, txt;
+    var v = chord.split(','), i, v2, pos, txt;
 
     v2 = [];
-    for ( i = 0; i < v.length; ++i )
-      v2.push(posToName(+v[i]));
+    $('#result .piano td').removeClass('selected');
+    for ( i = 0; i < v.length; ++i ) {
+      pos = +v[i];
+      $('#result .piano td[pos=' + pos + ']').addClass('selected');
+      v2.push(posToName(pos));
+    }
     txt = v2.join(',');
     $('#chord-input').val(txt);
     playChord(txt);
