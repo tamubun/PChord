@@ -170,9 +170,9 @@ $(function() {
     for ( i = 0; i < ans.length; ++i ) {
       c = ans[i];
       txt = [c.base + c.pattern,
-	     '音数' + c.num,
-	     c.dense ? '密' : '開',
-	     (c.shift > 0 ? '+' : '') + c.shift].join(' ');
+             '音数' + c.num,
+             c.dense ? '密' : '開',
+             (c.shift > 0 ? '+' : '') + c.shift].join(' ');
       $('#buttons').append($('<button chord="' + c.chord.toString() + '">' +
                             txt + '</button>'));
     }
