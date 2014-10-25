@@ -15,13 +15,7 @@
   text-align: center;
 }
 
-#search input {
-  width:2.5em;
-  margin-left: 3px;
-  margin-right: 8px;
-}
-
-#chord-input {
+.keys input {
   width:10em;
   margin-left: 3px;
   margin-right: 8px;

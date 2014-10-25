@@ -52,7 +52,7 @@ $(function() {
       $('#do-search').click(doSearch);
       $('#loading').hide();
       $('.piano td.white, .piano td.black').click(function() {
-        var input = $(this).siblings().eq(1).children(),
+        var input = $(this).siblings().first().find('input'),
             pos;
 
         input.val('');
