@@ -69,6 +69,10 @@ $(function() {
   };
   req.send();
   generateAll();
+  $('#highest,#lowest,#any1,#any2,#any3,#chord'.split(','))
+    .each(function(i, selector) {
+      makeKeyboard(selector);
+    });
   $('.piano input').val('');
   $('#buttons').on('click', 'button', function(ev) {
     printAndPlay($(ev.target).attr('chord'));
@@ -125,6 +129,7 @@ $(function() {
 
     $('#buttons').empty();
     $('#chord-input').val('');
+    $('#chord td').removeClass('selected');
 
     highest = doSearchSub('#highest-input', flag);
     lowest = doSearchSub('#lowest-input', flag);
@@ -308,5 +313,22 @@ $(function() {
         }
       }
     }
+  }
+
+  function makeKeyboard(selector) {
+    var oct, i, td, pos = 0;
+
+    for ( oct = 0; oct < 6; ++oct ) {
+      for ( i = 0; i < 12; ++i ) {
+        td = $('<td>');
+        td.addClass(Names[i].length < 2 ? 'white' : 'black')
+          .attr('pos', pos);
+        if ( i === 0 )
+          td.text(1+oct);
+        $(selector).append(td);
+        ++pos;
+      }
+    }
+    td.addClass('last');
   }
 });
