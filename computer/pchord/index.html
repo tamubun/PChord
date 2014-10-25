@@ -17,9 +17,7 @@
     <p>音は、"C4"のように音名とオクターブを繋いで指定して下さい。♯の付いた音は、例えば"C♯4", "C#4", "Cs4"のように記述します(どの書き方でも構いません)。♭の方は"E♭4", "Eb4", 又は"Ef4"のように記述します。</p>
     <p>検索結果が多い時は、下に並んだチェックボックスで条件を絞って下さい。</p>
     <p>例えば"D♯"の和音と"E♭"の和音は同じ物になり、どちらも列挙すると数が多くなってしまうので、今のところ"♯"の方だけを出すようにしています。</p>
-    <br>
-    <hr color="red">
-    <br>
+    <hr color="red" class="separate">
     <div id="search">
       <table class="piano">
         <tbody>
@@ -409,68 +407,66 @@
           </tr>
         </tbody>
       </table>
-      <br>
-      <br>
-      <div id="filter-base">
-        <input type="checkbox" checked value="C">C</input>
-        <input type="checkbox" checked value="C♯">C♯</input>
-        <input type="checkbox" checked value="D">D</input>
-        <input type="checkbox" checked value="D♯">D♯</input>
-        <input type="checkbox" checked value="E">E</input>
-        <input type="checkbox" checked value="F">F</input>
-        <input type="checkbox" checked value="F♯">F♯</input>
-        <input type="checkbox" checked value="G">G</input>
-        <input type="checkbox" checked value="G♯">G♯</input>
-        <input type="checkbox" checked value="A">A</input>
-        <input type="checkbox" checked value="A♯">A♯</input>
-        <input type="checkbox" checked value="B">B</input>
-      </div>
-      <div id="filter-pattern">
-        <input type="checkbox" checked value="">&nbsp</input>
-        <input type="checkbox" checked value="m">m</input>
-        <input type="checkbox" checked value="7">7</input>
-        <input type="checkbox" checked value="M7">M7</input>
-        <input type="checkbox" checked value="m7">m7</input>
-        <input type="checkbox" checked value="dim7">dim7</input>
-        <input type="checkbox" checked value="m7b5">m7b5</input>
-        <input type="checkbox" checked value="aug">aug</input>
-        <input type="checkbox" checked value="sus4">sus4</input>
-        <input type="checkbox" checked value="7sus4">7sus4</input>
-        <input type="checkbox" checked value="6">6</input>
-        <input type="checkbox" checked value="add9">add9</input>
-      </div>
-      <div id="filter-shift">
-        <input type="checkbox" checked value="-6">-6</input>
-        <input type="checkbox" checked value="-5">-5</input>
-        <input type="checkbox" checked value="-4">-4</input>
-        <input type="checkbox" checked value="-3">-3</input>
-        <input type="checkbox" checked value="-2">-2</input>
-        <input type="checkbox" checked value="-1">-1</input>
-        <input type="checkbox" checked value="0">0</input>
-        <input type="checkbox" checked value="1">+1</input>
-        <input type="checkbox" checked value="2">+2</input>
-        <input type="checkbox" checked value="3">+3</input>
-        <input type="checkbox" checked value="4">+4</input>
-        <input type="checkbox" checked value="5">+5</input>
-        <input type="checkbox" checked value="6">+6</input>
-      </div>
-      <div id="filter-num">
-        <input type="checkbox" checked value="3">音数3</input>
-        <input type="checkbox" checked value="4">音数4</input>
-      </div>
-      <div id="filter-dense">
-        <input type="checkbox" checked value="true">密</input>
-        <input type="checkbox" checked value="false">開</input>
-      </div>
-      <div>
-        <button id="do-search">検索</button>
+      <div class="separate">
+        <div id="filter-base">
+          <input type="checkbox" checked value="C">C</input>
+          <input type="checkbox" checked value="C♯">C♯</input>
+          <input type="checkbox" checked value="D">D</input>
+          <input type="checkbox" checked value="D♯">D♯</input>
+          <input type="checkbox" checked value="E">E</input>
+          <input type="checkbox" checked value="F">F</input>
+          <input type="checkbox" checked value="F♯">F♯</input>
+          <input type="checkbox" checked value="G">G</input>
+          <input type="checkbox" checked value="G♯">G♯</input>
+          <input type="checkbox" checked value="A">A</input>
+          <input type="checkbox" checked value="A♯">A♯</input>
+          <input type="checkbox" checked value="B">B</input>
+        </div>
+        <div id="filter-pattern">
+          <input type="checkbox" checked value="">&nbsp</input>
+          <input type="checkbox" checked value="m">m</input>
+          <input type="checkbox" checked value="7">7</input>
+          <input type="checkbox" checked value="M7">M7</input>
+          <input type="checkbox" checked value="m7">m7</input>
+          <input type="checkbox" checked value="dim7">dim7</input>
+          <input type="checkbox" checked value="m7b5">m7b5</input>
+          <input type="checkbox" checked value="aug">aug</input>
+          <input type="checkbox" checked value="sus4">sus4</input>
+          <input type="checkbox" checked value="7sus4">7sus4</input>
+          <input type="checkbox" checked value="6">6</input>
+          <input type="checkbox" checked value="add9">add9</input>
+        </div>
+        <div id="filter-shift">
+          <input type="checkbox" checked value="-6">-6</input>
+          <input type="checkbox" checked value="-5">-5</input>
+          <input type="checkbox" checked value="-4">-4</input>
+          <input type="checkbox" checked value="-3">-3</input>
+          <input type="checkbox" checked value="-2">-2</input>
+          <input type="checkbox" checked value="-1">-1</input>
+          <input type="checkbox" checked value="0">0</input>
+          <input type="checkbox" checked value="1">+1</input>
+          <input type="checkbox" checked value="2">+2</input>
+          <input type="checkbox" checked value="3">+3</input>
+          <input type="checkbox" checked value="4">+4</input>
+          <input type="checkbox" checked value="5">+5</input>
+          <input type="checkbox" checked value="6">+6</input>
+        </div>
+        <div id="filter-num">
+          <input type="checkbox" checked value="3">音数3</input>
+          <input type="checkbox" checked value="4">音数4</input>
+        </div>
+        <div id="filter-dense">
+          <input type="checkbox" checked value="true">密</input>
+          <input type="checkbox" checked value="false">開</input>
+        </div>
+        <div class="separate">
+          <button id="do-search">検索</button>
+        </div>
       </div>
     </div>
-    <br>
     <div id="result">
-      <div id="buttons">
+      <div id="buttons" class="separate">
       </div>
-      <br>
       <table class="piano">
         <tbody>
           <tr id="highest">
@@ -552,8 +548,7 @@
         </tbody>
       </table>
     </div>
-    <br>
-    <hr>
+    <hr class="separate">
     <p style="text-align: center;">
       <a href="../../index.html">ホームへ</a>
       <a href="http://bunysmc.exblog.jp/">ブログへ</a>
