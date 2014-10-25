@@ -77,6 +77,10 @@ $(function() {
   $('#buttons').on('click', 'button', function(ev) {
     printAndPlay($(ev.target).attr('chord'));
   });
+  $('#filters button').click(function() {
+    $(this).parents('tr').find('input')
+      .prop('checked', $(this).hasClass('all-on'));
+  });
 
   function play(pos) {
     var src = context.createBufferSource();
@@ -148,16 +152,16 @@ $(function() {
         continue;
       if ( lowest !== null && lowest !== c.chord[0] )
         continue;
-      if ( !$('#filter-base>input[value=' + c.base + ']').prop('checked') )
+      if ( !$('#filter-base input[value=' + c.base + ']').prop('checked') )
         continue;
-      if ( !$('#filter-pattern>input[value=' + c.pattern + ']')
+      if ( !$('#filter-pattern input[value=' + c.pattern + ']')
            .prop('checked') )
         continue;
-      if ( !$('#filter-shift>input[value=' + c.shift + ']').prop('checked') )
+      if ( !$('#filter-shift input[value=' + c.shift + ']').prop('checked') )
         continue;
-      if ( !$('#filter-num>input[value=' + c.num + ']').prop('checked') )
+      if ( !$('#filter-num input[value=' + c.num + ']').prop('checked') )
         continue;
-      if ( !$('#filter-dense>input[value=' + c.dense + ']').prop('checked') )
+      if ( !$('#filter-dense input[value=' + c.dense + ']').prop('checked') )
         continue;
 
       ans.push(c);
