@@ -53,19 +53,11 @@ $(function() {
         if ( ev.which === 13 )
           playChord($(this).val());
       });
-      $('.piano td.white, .piano td.black').click(function() {
-        var input = $(this).siblings().first().find('input'),
-            pos;
-
-        input.val('');
-        if ( $(this).hasClass('selected') ) {
-          $(this).removeClass('selected');
-        } else {
-          pos = +$(this).attr('pos');
-          selectPos($(this).parent(), pos);
-          input.val(posToName(pos));
-          play(pos);
-        }
+      $('#search .piano td.white, #search .piano td.black').click(function() {
+	searchPianoClicked($(this));
+      });
+      $('#result .piano td.white, #result .piano td.black').click(function() {
+	resultPianoClicked($(this));
       });
     });
 
@@ -125,6 +117,24 @@ $(function() {
 
     tds.removeClass('selected');
     tds.filter('[pos=' + pos + ']').addClass('selected');
+  }
+
+  function searchPianoClicked(key) {
+    var input = key.siblings().first().find('input'),
+        pos;
+
+    input.val('');
+    if ( key.hasClass('selected') ) {
+      key.removeClass('selected');
+    } else {
+      pos = +key.attr('pos');
+      selectPos(key.parent(), pos);
+      input.val(posToName(pos));
+      play(pos);
+    }
+  }
+
+  function resultPianoClicked(key) {
   }
 
   function doSearchSub(selector, flag) {
