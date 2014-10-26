@@ -26,14 +26,18 @@ $(function() {
   var allChords;
 
   var context = new AudioContext(),
-      req, buffer;
+      buffer;
 
-  req = new XMLHttpRequest();
-  req.open('GET', 'scale.ogg', true);
-  req.responseType = 'arraybuffer';
-  req.onload = function() {
-    context.decodeAudioData(req.response, function(b) {
+  loadScale().
+    then(function (response) {
+      var dfd = $.Deferred();
+
+      context.decodeAudioData(response, function(b) { dfd.resolve(b); });
+      return dfd.promise();
+    })
+    .then(function (b) {
       buffer = b;
+      $('#loading').hide();
       $('#search .piano input').keydown(function(ev) {
         var name = $(this).val(), pos;
 
@@ -49,8 +53,6 @@ $(function() {
         if ( ev.which === 13 )
           playChord($(this).val());
       });
-      $('#do-search').click(doSearch);
-      $('#loading').hide();
       $('.piano td.white, .piano td.black').click(function() {
         var input = $(this).siblings().first().find('input'),
             pos;
@@ -66,8 +68,7 @@ $(function() {
         }
       });
     });
-  };
-  req.send();
+
   generateAll();
   $('#highest,#lowest,#any1,#any2,#any3,#chord'.split(','))
     .each(function(i, selector) {
@@ -81,6 +82,21 @@ $(function() {
     $(this).parents('tr').find('input')
       .prop('checked', $(this).hasClass('all-on'));
   });
+  $('#do-search').click(doSearch);
+
+  function loadScale() {
+    var dfd = $.Deferred(
+      function() {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'scale.ogg', true);
+        req.responseType = 'arraybuffer';
+        req.onload = function() { dfd.resolve(req.response); };
+        req.send();
+      }
+    );
+
+    return dfd.promise();
+  }
 
   function play(pos) {
     var src = context.createBufferSource();
