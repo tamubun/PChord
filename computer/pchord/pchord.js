@@ -54,10 +54,10 @@ $(function() {
           playChord($(this).val());
       });
       $('#search .piano td.white, #search .piano td.black').click(function() {
-	searchPianoClicked($(this));
+        searchPianoClicked($(this));
       });
       $('#result .piano td.white, #result .piano td.black').click(function() {
-	resultPianoClicked($(this));
+        resultPianoClicked($(this));
       });
     });
 
@@ -101,7 +101,7 @@ $(function() {
   function playChord(input) {
     var v = input.split(',');
 
-    if ( v.length < 1 || v.length > 4 )
+    if ( input === '' || v.length > 4 )
       return;
 
     $(v).each(function(i, name) {
@@ -112,10 +112,11 @@ $(function() {
     });
   }
 
-  function selectPos(keys, pos) {
+  function selectPos(keys, pos, clear = true) {
     var tds = keys.find('td[pos]');
 
-    tds.removeClass('selected');
+    if ( clear )
+      tds.removeClass('selected');
     tds.filter('[pos=' + pos + ']').addClass('selected');
   }
 
@@ -135,6 +136,20 @@ $(function() {
   }
 
   function resultPianoClicked(key) {
+    var keys = key.siblings().add(key);
+
+    if ( key.hasClass('selected') ) {
+      key.removeClass('selected');
+    } else if ( keys.filter('.selected').length <= 3 ) {
+      selectPos(key.parent(), +key.attr('pos'), false);
+    } else {
+      return;
+    }
+
+    printAndPlay(
+      keys.filter('.selected')
+        .map(function() { return +$(this).attr('pos');})
+        .get().join(','));
   }
 
   function doSearchSub(selector, flag) {
@@ -205,7 +220,7 @@ $(function() {
   }
 
   function printAndPlay(chord) {
-    var v = chord.split(','), i, v2, pos, txt;
+    var v = chord !== '' ? chord.split(','): [], i, v2, pos, txt;
 
     v2 = [];
     $('#result .piano td').removeClass('selected');
