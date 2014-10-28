@@ -222,7 +222,7 @@ $(function() {
 
     for ( i = 0; i < ans.length; ++i ) {
       c = ans[i];
-      txt = [c.base + c.pattern,
+      txt = [Names[c.base] + c.pattern,
              '音数' + c.num,
              c.dense ? '密' : '開',
              (c.shift > 0 ? '+' : '') + c.shift].join(' ');
@@ -313,13 +313,7 @@ $(function() {
   function generateChord(base, pattern, shift, num, dense) {
     var seq = Chords[pattern], pos_b, ans = [], i, offset, p;
 
-    if ( seq === undefined || shift < -6 || shift > 6 || num < 3 || num > 4 )
-      return null;
-    base = base+'4';
-    pos_b = nameToPos(base);
-    if ( pos_b === null )
-      return null;
-
+    pos_b = 48+base;
     seq = (num === 3) ? seq[0] : seq[1];
     offset = 0;
     while ( pos_b + getDist(seq, num + offset - 1) >= 47 ) {
@@ -340,12 +334,11 @@ $(function() {
   }
 
   function generateAll() {
-    var i, j, flag, f, chord,
+    var j, flag, f, chord,
         base, pattern, shift, num, dense;
 
     allChords = [];
-    for ( i = 0; i < Names.length; ++i ) {
-      base = Names[i];
+    for ( base = 0; base < 12; ++base ) {
       for ( pattern in Chords ) {
         for ( shift = -6; shift < 7; ++shift ) {
           for ( num = 3; num < 5; ++num ) {
