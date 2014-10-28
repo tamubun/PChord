@@ -28,8 +28,8 @@ $(function() {
   var context = new AudioContext(),
       buffer;
 
-  loadScale().
-    then(function (response) {
+  loadScale()
+    .then(function (response) {
       var dfd = $.Deferred();
 
       context.decodeAudioData(response, function(b) { dfd.resolve(b); });
@@ -38,20 +38,8 @@ $(function() {
     .then(function (b) {
       buffer = b;
       $('#loading').hide();
-      $('#search .piano input').keydown(function(ev) {
-        var name = $(this).val(), pos;
-
-        if ( ev.which === 13 && name !== '' ) {
-          pos = nameToPos(name);
-          if ( pos !== null ) {
-            selectPos($(this).parents('.keys'), pos);
-            play(pos);
-          }
-        }
-      });
-      $('#chord-input').keydown(function(ev) {
-        if ( ev.which === 13 )
-          playChord($(this).val());
+      $('.piano input').keydown(function(ev) {
+        textEntered($(this), ev);
       });
       $('#search .piano td.white, #search .piano td.black').click(function() {
         searchPianoClicked($(this));
@@ -98,17 +86,12 @@ $(function() {
     src.start(0, pos+0.05, 0.95);
   }
 
-  function playChord(input) {
-    var v = input.split(',');
-
-    if ( input === '' || v.length > 4 )
+  function playChord(chord) {
+    if ( chord.length > 4 )
       return;
 
-    $(v).each(function(i, name) {
-      var pos = nameToPos(name);
-      if ( pos === null || pos < 0 )
-        return;
-      play(pos);
+    $(chord).each(function(i, pos) {
+      play(+pos);
     });
   }
 
@@ -150,6 +133,35 @@ $(function() {
       keys.filter('.selected')
         .map(function() { return +$(this).attr('pos');})
         .get().join(','));
+  }
+
+  function textEntered(input, ev) {
+    var text = input.val(),
+        keys = input.parents('.keys'),
+        chord = [], pos;
+
+    if ( ev.which !== 13 )
+      return;
+    keys.children().removeClass('selected');
+    if ( text === '' )
+      return;
+
+    if ( input.attr('id') === 'chord-input' ) {
+      $(text.split(',')).each(function(i, name) {
+        pos = nameToPos(name);
+        if ( pos === null )
+          return;
+        chord.push(pos);
+        selectPos(keys, pos, false);
+      });
+      playChord(chord);
+    } else {
+      pos = nameToPos(text);
+      if ( pos !== null ) {
+        selectPos(keys, pos);
+        play(pos);
+      }
+    }
   }
 
   function doSearchSub(selector, flag) {
@@ -219,19 +231,18 @@ $(function() {
     }
   }
 
-  function printAndPlay(chord) {
-    var v = chord !== '' ? chord.split(','): [], i, v2, pos, txt;
+  function printAndPlay(chord_s) {
+    var chord = chord_s !== '' ? chord_s.split(','): [],
+        names = [], pos, i;
 
-    v2 = [];
     $('#result .piano td').removeClass('selected');
-    for ( i = 0; i < v.length; ++i ) {
-      pos = +v[i];
+    for ( i = 0; i < chord.length; ++i ) {
+      pos = +chord[i];
       $('#result .piano td[pos=' + pos + ']').addClass('selected');
-      v2.push(posToName(pos));
+      names.push(posToName(pos));
     }
-    txt = v2.join(',');
-    $('#chord-input').val(txt);
-    playChord(txt);
+    $('#chord-input').val(names.join(','));
+    playChord(chord);
   }
 
   function posToName(pos) {
