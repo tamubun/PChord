@@ -1,6 +1,7 @@
 .separate {
   margin-top: 15px;
   margin-bottom: 15px;
+  clear: both;
 }
 
 #loading {
@@ -13,6 +14,18 @@
   z-index: 1;
   font: bold xx-large sans-serif;
   text-align: center;
+}
+
+#prefer {
+  vertical-align: middle;
+}
+
+#prefer-div {
+  float: right;
+}
+
+#buttons button {
+  margin: 2px;
 }
 
 .keys input {

@@ -16,43 +16,46 @@
     <p>一番高い音や、一番低い音などを最低一つ指定して、検索を押すと、条件に合う和音を見つけます。見つかった音のボタンを押すとその和音が鳴ります(時々、音が割れますが何回かボタンを押すと直ります)。</p>
     <p>音は、鍵盤から入力するか、"C4"のように音名とオクターブを繋いで指定して下さい。♯の付いた音は、例えば"C♯4", "C#4", "Cs4"のように記述します(どの書き方でも構いません)。♭の方は"E♭4", "Eb4", 又は"Ef4"のように記述します。</p>
     <p>検索結果が多い時は、下に並んだチェックボックスで条件を絞って下さい。</p>
-    <p>例えば"D♯"の和音と"E♭"の和音は同じ物になり、どちらも列挙すると数が多くなってしまうので、今のところ"♯"の方だけを出すようにしています。</p>
+    <p>例えば"D♯"を基音とする和音と"E♭"を基音とする和音は同じ物になり、どちらも列挙すると数が多くなってしまうので、次のスライダーで好みの表示を調製して下さい。</p>
+    <div id="prefer-div">
+      ♭<input id="prefer" type="range" min="0" max="5" value="2">♯
+    </div>
     <hr color="red" class="separate">
-    <div id="search">
+    <div id="search" class="separate">
       <table class="piano">
         <tbody>
           <tr id="highest" class="keys">
             <td>
               <div>一番高い音:</div>
-              <div><input type="text" id="highest-input"></input></div>
+              <div><input type="text" id="highest-input"></div>
             </td>
           </tr>
           <tr class="space"></tr>
           <tr id="lowest" class="keys">
             <td>
               <div>一番低い音:</div>
-              <div><input type="text" id="lowest-input"></input></div>
+              <div><input type="text" id="lowest-input"></div>
             </td>
           </tr>
           <tr class="space"></tr>
           <tr id="any1" class="keys">
             <td>
               <div>どこでも:</div>
-              <div><input type="text" id="any1-input"></input></div>            
+              <div><input type="text" id="any1-input"></div>
             </td>
           </tr>
           <tr class="space"></tr>
           <tr id="any2" class="keys">
             <td>
               <div>どこでも:</div>
-              <div><input type="text" id="any2-input"></input></div>
+              <div><input type="text" id="any2-input"></div>
             </td>
           </tr>
           <tr class="space"></tr>
           <tr id="any3" class="keys">
             <td>
               <div>どこでも:<div>
-              <div><input type="text" id="any3-input"></input><div>
+              <div><input type="text" id="any3-input"><div>
             </td>
           </tr>
         </tbody>
@@ -60,18 +63,18 @@
       <table id="filters" class="separate">
         <tr id="filter-base">
           <td>
-            <input type="checkbox" checked value="0">C</input>
-            <input type="checkbox" checked value="1">C♯</input>
-            <input type="checkbox" checked value="2">D</input>
-            <input type="checkbox" checked value="3">D♯</input>
-            <input type="checkbox" checked value="4">E</input>
-            <input type="checkbox" checked value="5">F</input>
-            <input type="checkbox" checked value="6">F♯</input>
-            <input type="checkbox" checked value="7">G</input>
-            <input type="checkbox" checked value="8">G♯</input>
-            <input type="checkbox" checked value="9">A</input>
-            <input type="checkbox" checked value="10">A♯</input>
-            <input type="checkbox" checked value="11">B</input>
+            <input type="checkbox" checked value="0"><label>C</label>
+            <input type="checkbox" checked value="1"><label>C♯</label>
+            <input type="checkbox" checked value="2"><label>D</label>
+            <input type="checkbox" checked value="3"><label>D♯</label>
+            <input type="checkbox" checked value="4"><label>E</label>
+            <input type="checkbox" checked value="5"><label>F</label>
+            <input type="checkbox" checked value="6"><label>F♯</label>
+            <input type="checkbox" checked value="7"><label>G</label>
+            <input type="checkbox" checked value="8"><label>G♯</label>
+            <input type="checkbox" checked value="9"><label>A</label>
+            <input type="checkbox" checked value="10"><label>A♯</label>
+            <input type="checkbox" checked value="11"><label>B</label>
           </td>
           <td>
             <button class="all-on">全部チェックする</button>
@@ -80,18 +83,18 @@
         </tr>
         <tr id="filter-pattern">
           <td>
-            <input type="checkbox" checked value="">&nbsp</input>
-            <input type="checkbox" checked value="m">m</input>
-            <input type="checkbox" checked value="7">7</input>
-            <input type="checkbox" checked value="M7">M7</input>
-            <input type="checkbox" checked value="m7">m7</input>
-            <input type="checkbox" checked value="dim7">dim7</input>
-            <input type="checkbox" checked value="m7b5">m7b5</input>
-            <input type="checkbox" checked value="aug">aug</input>
-            <input type="checkbox" checked value="sus4">sus4</input>
-            <input type="checkbox" checked value="7sus4">7sus4</input>
-            <input type="checkbox" checked value="6">6</input>
-            <input type="checkbox" checked value="add9">add9</input>
+            <input type="checkbox" checked value="">&nbsp
+            <input type="checkbox" checked value="m">m
+            <input type="checkbox" checked value="7">7
+            <input type="checkbox" checked value="M7">M7
+            <input type="checkbox" checked value="m7">m7
+            <input type="checkbox" checked value="dim7">dim7
+            <input type="checkbox" checked value="m7b5">m7b5
+            <input type="checkbox" checked value="aug">aug
+            <input type="checkbox" checked value="sus4">sus4
+            <input type="checkbox" checked value="7sus4">7sus4
+            <input type="checkbox" checked value="6">6
+            <input type="checkbox" checked value="add9">add9
           </td>
           <td>
             <button class="all-on">全部チェックする</button>
@@ -100,19 +103,19 @@
         </tr>
         <tr id="filter-shift">
           <td>
-            <input type="checkbox" checked value="-6">-6</input>
-            <input type="checkbox" checked value="-5">-5</input>
-            <input type="checkbox" checked value="-4">-4</input>
-            <input type="checkbox" checked value="-3">-3</input>
-            <input type="checkbox" checked value="-2">-2</input>
-            <input type="checkbox" checked value="-1">-1</input>
-            <input type="checkbox" checked value="0">0</input>
-            <input type="checkbox" checked value="1">+1</input>
-            <input type="checkbox" checked value="2">+2</input>
-            <input type="checkbox" checked value="3">+3</input>
-            <input type="checkbox" checked value="4">+4</input>
-            <input type="checkbox" checked value="5">+5</input>
-            <input type="checkbox" checked value="6">+6</input>
+            <input type="checkbox" checked value="-6">-6
+            <input type="checkbox" checked value="-5">-5
+            <input type="checkbox" checked value="-4">-4
+            <input type="checkbox" checked value="-3">-3
+            <input type="checkbox" checked value="-2">-2
+            <input type="checkbox" checked value="-1">-1
+            <input type="checkbox" checked value="0">0
+            <input type="checkbox" checked value="1">+1
+            <input type="checkbox" checked value="2">+2
+            <input type="checkbox" checked value="3">+3
+            <input type="checkbox" checked value="4">+4
+            <input type="checkbox" checked value="5">+5
+            <input type="checkbox" checked value="6">+6
           </td>
           <td>
             <button class="all-on">全部チェックする</button>
@@ -121,14 +124,14 @@
         </tr>
         <tr id="filter-num">
           <td>
-            <input type="checkbox" checked value="3">音数3</input>
-            <input type="checkbox" checked value="4">音数4</input>
+            <input type="checkbox" checked value="3">音数3
+            <input type="checkbox" checked value="4">音数4
           </td>
         </tr>
         <tr id="filter-dense">
           <td>
-            <input type="checkbox" checked value="true">密</input>
-            <input type="checkbox" checked value="false">開</input>
+            <input type="checkbox" checked value="true">密
+            <input type="checkbox" checked value="false">開
           </td>
         </tr>
         <tr class="separate">
@@ -144,7 +147,7 @@
           <tr id="chord" class="keys">
             <td>
               <div>コード:</div>
-              <div><input type="text" id="chord-input"></input></div>
+              <div><input type="text" id="chord-input"></div>
             </td>
           </tr>
         </tbody>

@@ -1,7 +1,19 @@
 'use strict'
 
 $(function() {
-  var Names = 'C,C♯,D,D♯,E,F,F♯,G,G♯,A,A♯,B'.split(',');
+  var Names = [
+    'C',
+    'D♭D♭C♯C♯C♯C♯',
+    'D',
+    'E♭E♭E♭E♭D♯D♯',
+    'E', 'F',
+    'G♭F♯F♯F♯F♯F♯',
+    'G',
+    'A♭A♭A♭G♯G♯G♯',
+    'A',
+    'B♭B♭B♭B♭B♭A♯',
+    'B'
+  ];
   var Chords = {
     /*  和音名:[<密3の列>,<密4の列>]
         <密3/密4の列> --- [s, d0, d1, d2, ...]
@@ -50,6 +62,8 @@ $(function() {
     });
 
   generateAll();
+  setPrefer();
+  $('#prefer').change(setPrefer);
   $('#highest,#lowest,#any1,#any2,#any3,#chord'.split(','))
     .each(function(i, selector) {
       makeKeyboard(selector);
@@ -222,11 +236,12 @@ $(function() {
 
     for ( i = 0; i < ans.length; ++i ) {
       c = ans[i];
-      txt = [Names[c.base] + c.pattern,
+      txt = ['<label>' + posToName(c.base, false)  + '</label>' + c.pattern,
              '音数' + c.num,
              c.dense ? '密' : '開',
              (c.shift > 0 ? '+' : '') + c.shift].join(' ');
-      $('#buttons').append($('<button chord="' + c.chord.toString() + '">' +
+      $('#buttons').append($('<button chord="' + c.chord.toString() +
+                             '" base="' + c.base + '">' +
                             txt + '</button>'));
     }
   }
@@ -245,8 +260,21 @@ $(function() {
     playChord(chord);
   }
 
-  function posToName(pos) {
-    return Names[pos%12] + (1 + Math.floor(pos / 12));
+  function setPrefer() {
+    $('#filter-base label').text(function(i) {
+      return posToName(i, false);
+    });
+    $('#buttons label').text(function() {
+      return posToName(+$(this).parent().attr('base'), false);
+    });
+  }
+
+  function posToName(pos, withOct = true) {
+    var n = Names[pos%12];
+
+    if ( n.length > 1 )
+      n = n.substr(2 * $('#prefer').val(), 2);
+    return withOct ? n + (1 + Math.floor(pos / 12)) : n;
   }
 
   function posToFlag(pos) {
@@ -269,7 +297,7 @@ $(function() {
 
   function nameToPos(name) {
     var found = name.toUpperCase().match(/^([A-H])([FSB#♭♯]?)([1-6])$/),
-        doremi, acc, oct;
+        doremi, acc, oct, idx;
 
     if ( found === null )
       return null;
@@ -283,17 +311,13 @@ $(function() {
     if ( acc === 'f' || acc === 'b' )
       acc = '♭';
     else if ( acc === 's' || acc === '#' )
-      acc = '♯'
-    if ( acc === '♯' && ( doremi === 'E' || doremi === 'B' ) ||
-         acc === '♭' && ( doremi === 'F' || doremi === 'C' ) )
-      return null;
-
-    if ( acc === '♭' ) {
-      doremi = String.fromCharCode(doremi.charCodeAt(0)-1);
       acc = '♯';
-    }
+    doremi += acc;
 
-    return 12 * (+oct-1) + Names.indexOf(doremi+acc);
+    for ( idx = 0; idx < Names.length; ++idx ) {
+      if ( Names[idx].indexOf(doremi) >= 0 )
+        return 12 * (+oct-1) + idx;
+    }
   }
 
   function getDist(seq, idx) {
