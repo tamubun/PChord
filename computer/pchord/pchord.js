@@ -1,18 +1,33 @@
 'use strict'
 
 $(function() {
-  var Names = [
-    'C',
-    'D♭D♭C♯C♯C♯C♯',
-    'D',
-    'E♭E♭E♭E♭D♯D♯',
-    'E', 'F',
-    'G♭F♯F♯F♯F♯F♯',
-    'G',
-    'A♭A♭A♭G♯G♯G♯',
-    'A',
-    'B♭B♭B♭B♭B♭A♯',
-    'B'
+  var NameToIdx = {
+    'C': 0,
+    'D♭': 1, 'C♯': 1,
+    'D': 2,
+    'E♭': 3, 'D♯': 3,
+    'E': 4,
+    'F': 5,
+    'G♭': 6, 'F♯': 6,
+    'G': 7,
+    'A♭': 8,'G♯': 8,
+    'A': 9,
+    'B♭':10, 'A♯': 10,
+    'B': 11
+  };
+  var IdxToName = [
+    ['C'],
+    ['D♭', 'D♭', 'C♯'],
+    ['D'],
+    ['E♭', 'E♭', 'E♭', 'E♭', 'D♯'],
+    ['E'],
+    ['F'],
+    ['G♭', 'F♯'],
+    ['G'],
+    ['A♭', 'A♭', 'A♭', 'G♯'],
+    ['A'],
+    ['B♭', 'B♭', 'B♭', 'B♭', 'B♭', 'A♯'],
+    ['B']
   ];
   var Chords = {
     /*  和音名:[<密3の列>,<密4の列>]
@@ -270,11 +285,10 @@ $(function() {
   }
 
   function posToName(pos, withOct = true) {
-    var n = Names[pos%12];
+    var v = IdxToName[pos%12],
+        prefer = Math.min(+$('#prefer').val(), v.length-1);
 
-    if ( n.length > 1 )
-      n = n.substr(2 * $('#prefer').val(), 2);
-    return withOct ? n + (1 + Math.floor(pos / 12)) : n;
+    return withOct ? v[prefer] + (1 + Math.floor(pos / 12)) : v[prefer];
   }
 
   function posToFlag(pos) {
@@ -312,12 +326,9 @@ $(function() {
       acc = '♭';
     else if ( acc === 's' || acc === '#' )
       acc = '♯';
-    doremi += acc;
 
-    for ( idx = 0; idx < Names.length; ++idx ) {
-      if ( Names[idx].indexOf(doremi) >= 0 )
-        return 12 * (+oct-1) + idx;
-    }
+    idx = NameToIdx[doremi + acc];
+    return (idx === undefined) ? null : 12 * (+oct-1) + idx;
   }
 
   function getDist(seq, idx) {
@@ -395,7 +406,7 @@ $(function() {
     for ( oct = 0; oct < 6; ++oct ) {
       for ( i = 0; i < 12; ++i ) {
         td = $('<td>');
-        td.addClass(Names[i].length < 2 ? 'white' : 'black')
+        td.addClass(IdxToName[i].length < 2 ? 'white' : 'black')
           .attr('pos', pos);
         if ( i === 0 )
           td.text(1+oct);
